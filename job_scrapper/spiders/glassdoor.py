@@ -11,7 +11,7 @@ from twisted.internet.error import TimeoutError, TCPTimedOutError
 class GlassdoorSpider(scrapy.Spider):
     name = 'glassdoor'
     allowed_domains = []
-    start_urls = ['https://www.glassdoor.com/Job/software-engineer-jobs-SRCH_KO0,17.htm']
+    start_urls = ['https://www.glassdoor.com.br/Vaga/front-end-vagas-SRCH_KE0,9.htm']
     page = 0
 
     def parse(self, response):
@@ -21,15 +21,17 @@ class GlassdoorSpider(scrapy.Spider):
         for job in job_list:
             #print("FOUND!")
             jobItem = JobItem()
-            detail_url = job.css('.logoWrap a::attr(href)').extract_first()
-            title = job.css('.flexbox .jobLink::text').extract_first()
-            location = job.css('.flexbox .subtle::text').extract_first()
+            detail_url = job.css('.jobContainer .jobHeader a::attr(href)').extract_first()
+            title = job.css('.jobLink span::text').extract_first()
+            location = job.css('.jobInfoItem .subtle::text').extract_first()
+            company_name = job.css('.jobTitle .jobEmpolyerName::text').extract_first()
 
             jobID = detail_url.split("=")[-1]
             #print(jobID)
             jobItem['jobID'] = jobID
             jobItem['title'] = title
             jobItem['location'] = location
+            jobItem['company_name'] = company_name
             #print(title)
             url = 'https://www.glassdoor.com'+detail_url
             #print(url)
@@ -50,14 +52,9 @@ class GlassdoorSpider(scrapy.Spider):
 
         jobItem = response.meta['jobItem']
 
-        company_name = response.xpath('//*[@id="HeroHeaderModule"]/div[3]/div[2]/span[1]/text()').extract_first()
-        #location = response.css('#HeroHeaderModule > div.empInfo.tbl > div.header.cell.info > span.subtle.ib::text').extract_first()
-
-        sel = response.css('#JobDescContainer > div.jobDescriptionContent.desc')
-        details = sel.xpath('//*[@id="JobDescContainer"]/div[1]/ul[1]//text()').extract()
-        details + sel.xpath('//*[@id="JobDescContainer"]/div[1]/ul[2]//text()').extract()
-
-        jobItem['company_name'] = company_name
+        sel = response.css('#JobDescriptionContainer div.jobDescriptionContent.desc')
+        details = sel.xpath('//*[@id="JobDescriptionContainer"]/div[1]/ul[1]//text()').extract()
+        details + sel.xpath('//*[@id="JobDescriptionContainer"]/div[1]/ul[2]//text()').extract()
 
         jobItem['details'] = details
 
