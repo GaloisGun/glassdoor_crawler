@@ -1,29 +1,38 @@
 # Job Crawler for Glassdoor
-The crawler was designed to extract job information from the glassdoor.
+The crawler was designed to extract job information from the Glassdoor.
 
 ## Installation
 - Python 2.7
+- virtualenv
 - Scrapy
 
 ## Usage
 1. Download
-````
-git clone git@github.com:GaloisGun/glassdoor_crawler.git
-````
+`git clone git@github.com:naweskil/glassdoor_crawler.git`
 
-2. Open Glassdoor.com 
-- Do not login in
-- search the job you want to crawl
-- copy the result link as start_url
+2. Install virtualenv (Windows)
+- Run on terminal `py -m pip install --user virtualenv`
+- Create a virtual environment `py -m venv env`
+- Activate the environment `.\env\Scripts\activate`
 
-3. Change the start_urls
-Open glassdoor.py and change the start_urls
+OBS: For MAC, please check this link:
+[https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
 
-4. Run
-```````
-scrapy crawl glassdoor -o jobs.json
-```````
-The program will automatically create a json file to store the results
+3. Install Scrapy on activated virtual environment
+`pip install Scrapy`
+
+4. Open Glassdoor.com 
+- Do not login in;
+- Search the job you want to crawl;
+- Copy the result link as `start_url`.
+
+5. Change the start_urls
+Open `glassdoor.py` file and change the `start_urls`.
+
+6. Run
+`scrapy crawl glassdoor -o jobs.json`
+
+The program will automatically create a json file (if not exists) to store the results.
 
 ## Sample Result
 ``````
@@ -80,7 +89,4 @@ The program will automatically create a json file to store the results
     ]
   }
   ]
-  ``````
-  
-
-
+``````
